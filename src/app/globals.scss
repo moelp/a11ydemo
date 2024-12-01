@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/** 
+  *,
+  *:before,
+  *:after {
+    border: 1px solid red;
+  } 
+*/
+
+:root,
+[data-mode='light'] {
+  --primary--lighter: #cddef9;
+  --primary: #004cc2;
+  --primary--hover: #003484;
+  --background: #f9f9fa;
+  --background--secondary: #eff1f3;
+  --background--level1: #f9f9fa;
+  --background-level1-hover: #dadde3;
+  --foreground: #20242b;
+  --foreground--muted: #4b5565;
+  --foreground--onPrimary: #f9f9fa;
+  --foreground--muted--onSecondary: #4b5565;
+  --foreground--primary: #004cc2;
+  --foreground-level1-hover: #20242b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary--lighter: #1b69e4;
+    --primary: #1b69e4;
+    --primary--hover: #2555d9;
+    --background: #13161a;
+    --background--secondary: #20242b;
+    --background--level1: #20242b;
+    --background-level1-hover: #333a44; // #4b5565; //#333a44;
+    --foreground: #eff1f3;
+    --foreground--muted: #b8bfc9;
+    --foreground--onPrimary: #f7fafe;
+    --foreground--muted--onSecondary: #dadde3;
+    --foreground--primary: #5691eb;
+    --foreground-level1-hover: #eff1f3;
+  }
+}
+
+[data-mode='dark'] {
+  --primary--lighter: #1b69e4;
+  --primary: #1b69e4;
+  --primary--hover: #2555d9;
+  --background: #13161a;
+  --background--secondary: #20242b;
+  --background--level1: #20242b;
+  --background-level1-hover: #333a44; // #4b5565; //#333a44;
+  --foreground: #eff1f3;
+  --foreground--muted: #b8bfc9;
+  --foreground--onPrimary: #f7fafe;
+  --foreground--muted--onSecondary: #dadde3;
+  --foreground--primary: #5691eb;
+  --foreground-level1-hover: #eff1f3;
+}
+
+@media (forced-colors: active) {
+  :root {
+    --primary: #ffffff;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --primary: #fde047;
+    --primary--hover: #facc15;
+    --background: #000000;
+    --background--secondary: #171717;
+    --background--level1: #171717;
+    --background-level1-hover: #fde047;
+    --foreground: #ffffff;
+    --foreground--muted: #ffffff;
+    --foreground--onPrimary: #000000;
+    --foreground--primary: #fde047;
+    --foreground-level1-hover: #000000;
+  }
+}
+
+[data-mode='contrasthigh'] {
+  --primary: #fde047;
+  --primary--hover: #facc15;
+  --background: #000000;
+  --background--secondary: #171717;
+  --background--level1: #171717;
+  --background-level1-hover: #fde047;
+  --foreground: #ffffff;
+  --foreground--muted: #ffffff;
+  --foreground--onPrimary: #000000;
+  --foreground--primary: #fde047;
+  --foreground-level1-hover: #000000;
+}
+
+html {
+  @apply motion-safe:scroll-smooth;
+}
+
+body {
+  color: var(--foreground--muted);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* .main {
+  margin-left: clamp(15rem, 20%, 20rem);
+  padding-inline: 3rem;
+} */
+/* .aside {
+  width: clamp(15rem, 20%, 20rem);
+} */
