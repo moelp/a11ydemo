@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-
+// import dynamic from 'next/dynamic';
 import {
   IconChevronDown,
   IconChevronLeft,
@@ -169,16 +169,16 @@ export default function Home() {
 
   const handleOpenModalExample = () => {
     refModalExample.current?.open();
-    console.log('ModalExample State', refModalExample.current?.getState());
-    console.log('isModalExampleOpen', isModalExampleOpen);
+    //console.log('ModalExample State', refModalExample.current?.getState());
+    //console.log('isModalExampleOpen', isModalExampleOpen);
     //const modalState = refModalExample.current?.getState();
     setIsModalExampleOpen(!isModalExampleOpen); // Set isModalOpen to true when opening
   };
 
   const handleCloseModalExample = () => {
     refModalExample.current?.close();
-    console.log('ModalExample State', refModalExample.current?.getState());
-    console.log('isModalExampleOpen', isModalExampleOpen);
+    //console.log('ModalExample State', refModalExample.current?.getState());
+    //console.log('isModalExampleOpen', isModalExampleOpen);
     //const modalState = refModalExample.current?.getState();
     setIsModalExampleOpen(!isModalExampleOpen); // Set isModalOpen to false when closing
   };
