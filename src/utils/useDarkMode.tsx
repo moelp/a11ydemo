@@ -1,20 +1,23 @@
 import { useState, useEffect } from 'react';
 
 function useDarkMode() {
-  const [isDarkMode, setIsDarkMode] = useState(
-    window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-  );
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      setIsDarkMode(mediaQuery.matches); // Set initial state based on the current preference
 
-    const handleChange = (event: MediaQueryListEvent) =>
-      setIsDarkMode(event.matches);
+      const handleChange = (event: MediaQueryListEvent) => {
+        setIsDarkMode(event.matches);
+      };
 
-    mediaQuery.addEventListener('change', handleChange);
+      mediaQuery.addEventListener('change', handleChange);
 
-    return () => mediaQuery.removeEventListener('change', handleChange);
+      return () => {
+        mediaQuery.removeEventListener('change', handleChange);
+      };
+    }
   }, []);
 
   return isDarkMode;
