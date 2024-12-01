@@ -1,0 +1,38 @@
+.modalCenter {
+  display: none;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: disappear 0.5s;
+  }
+}
+
+.modalCenter[open],
+.isOpen {
+  display: block;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: appear 0.5s;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes disappear {
+  from {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    display: none;
+    opacity: 0;
+    transform: translateY(4rem);
+  }
+}
