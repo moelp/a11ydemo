@@ -8,10 +8,11 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
+// import { createPortal } from 'react-dom';
 
 import { useA11yContext } from '#/utils/a11yContext';
 
+import ClientOnlyPortal from '#/components/ClientOnlyPortal/ClientOnlyPortal';
 import Button from '#/components/Button/Button';
 
 import styles from '#/components/Modal/Modal.module.scss';
@@ -114,41 +115,42 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(function Modal(
       ? 'start-auto end-0 top-0 m-0 w-80 h-screen rounded-s-2xl'
       : 'start-0 end-0 top-0 bottom-0 m-auto w-fit h-fit rounded-2xl';
 
-  return createPortal(
-    <SemanticTag
-      ref={(element: HTMLDialogElement | HTMLDivElement | null) => {
-        dialogRef.current = element;
-      }}
-      className={`${
-        position === 'center' && styles.modalCenter
-      } modal fixed text-foregroundMutedOnSecondary bg-backgroundLevel1 shadow-2xl p-4 max-h-screen motion-safe:duration-300 z-50 ${classPosition} ${
-        position === 'right' &&
-        (isOpen === true
-          ? 'translate-x-0'
-          : 'translate-x-full rtl:-translate-x-full')
-      } ${
-        position === 'center' &&
-        (isA11y
-          ? ''
-          : isOpen === true
-          ? `${styles.isOpen}`
-          : `${styles.modalCenter}`)
-      }`}
-      data-test="modal">
-      <Button
-        isA11y={isA11y}
-        autoFocus={isA11y}
-        onClick={() => {
-          if (onClose) {
-            onClose();
-          } else if (ref && 'current' in ref && ref.current?.close) {
-            ref.current.close();
-          }
-        }}>
-        Close
-      </Button>
-      {children}
-    </SemanticTag>,
-    document.body
+  return (
+    <ClientOnlyPortal selector="#modals">
+      <SemanticTag
+        ref={(element: HTMLDialogElement | HTMLDivElement | null) => {
+          dialogRef.current = element;
+        }}
+        className={`${
+          position === 'center' && styles.modalCenter
+        } modal fixed text-foregroundMutedOnSecondary bg-backgroundLevel1 shadow-2xl p-4 max-h-screen motion-safe:duration-300 z-50 ${classPosition} ${
+          position === 'right' &&
+          (isOpen === true
+            ? 'translate-x-0'
+            : 'translate-x-full rtl:-translate-x-full')
+        } ${
+          position === 'center' &&
+          (isA11y
+            ? ''
+            : isOpen === true
+            ? `${styles.isOpen}`
+            : `${styles.modalCenter}`)
+        }`}
+        data-test="modal">
+        <Button
+          isA11y={isA11y}
+          autoFocus={isA11y}
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else if (ref && 'current' in ref && ref.current?.close) {
+              ref.current.close();
+            }
+          }}>
+          Close
+        </Button>
+        {children}
+      </SemanticTag>
+    </ClientOnlyPortal>
   );
 });
