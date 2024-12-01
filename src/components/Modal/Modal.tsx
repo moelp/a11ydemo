@@ -14,7 +14,7 @@ import { useA11yContext } from '#/utils/a11yContext';
 
 import Button from '#/components/Button/Button';
 
-import styles from './Modal.module.scss';
+import styles from '#/components/Modal/Modal.module.scss';
 
 export interface ModalHandle {
   open: () => void;
