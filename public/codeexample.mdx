@@ -1,0 +1,268 @@
+```jsx
+import { useId } from '@floating-ui/react';
+import type { ChangeEvent, FC, FocusEvent, MouseEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { useTheme } from 'styled-components';
+
+import { renderInlineAlert } from './helpers/renderInlineAlert';
+import type { InputProps, InputValue } from './Input.interface';
+import {
+  HelperText,
+  StyledInput,
+  StyledInputMask,
+  StyledInputWrapper,
+} from './Input.styled';
+import { inputTheme } from './Input.theme';
+import { PrefixIcon, SuffixIcon } from './partials/InputIcon/InputIcon';
+import type { InputIconState } from './partials/InputIcon/InputIcon.interface';
+import { InputLabel } from './partials/InputLabel/InputLabel';
+
+const mapStateToIconState = {
+  valid: 'valid',
+  error: 'error',
+  disabled: 'disabled',
+  warning: 'warning',
+};
+
+const isValidValue = (value: InputValue | undefined) =>
+  value === 0 ? true : !!value;
+
+export const Input: FC<InputProps> = (props) => {
+  const {
+    autofocus = false,
+    autocomplete = 'on',
+    className,
+    validationMessage,
+    helpText,
+    prefixIconLabel,
+    suffixIconLabel,
+    prefixIcon,
+    suffixIcon,
+    isPrefixIconPressed,
+    isSuffixIconPressed,
+    inputMaskProps,
+    inputProps,
+    inputRef,
+    inputType = 'text',
+    label,
+    onBlur,
+    onChange,
+    onClick,
+    onClickSuffixIcon,
+    onClickPrefixIcon,
+    onResetIconClick,
+    onFocus,
+    onKeyDown,
+    onKeyUp,
+    onMouseEnter,
+    onMouseLeave,
+    placeholder = '',
+    state = 'idle',
+    value,
+    hasPersonallyIdentifiableInformation = false,
+    hasDefaultValidationMessage = false,
+    slot,
+  } = props;
+
+  const [isShrink, changeShrink] = useState < boolean > isValidValue(value);
+  const [isFocus, changeFocus] = useState < boolean > autofocus;
+
+  const theme = useTheme();
+  const uniqueId = useId();
+  const id = inputProps?.id ?? uniqueId;
+
+  useEffect(() => {
+    changeShrink(isFocus || isValidValue(value));
+  }, [isFocus, value]);
+
+  const onMouseEnterHandler = (ev: MouseEvent<HTMLInputElement>) => {
+    if (onMouseEnter) onMouseEnter(ev);
+  };
+
+  const onMouseLeaveHandler = (ev: MouseEvent<HTMLInputElement>) => {
+    if (onMouseLeave) onMouseLeave(ev);
+  };
+
+  const onFocusHandler = (ev: FocusEvent<HTMLInputElement>) => {
+    if (onFocus) onFocus(ev);
+    changeShrink(true);
+    changeFocus(true);
+  };
+
+  const onBlurHandler = (ev: FocusEvent<HTMLInputElement>) => {
+    if (onBlur) onBlur(ev);
+    if (!value) {
+      changeShrink(false);
+    }
+    changeFocus(false);
+  };
+
+  const onChangeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) onChange(ev);
+  };
+
+  const onClickHandler = (ev: MouseEvent<HTMLInputElement>) => {
+    ev.stopPropagation();
+    if (onClick) onClick(ev);
+  };
+
+  const onClickSuffixIconHandler = (ev: MouseEvent<HTMLInputElement>) => {
+    ev.stopPropagation();
+
+    if (onClickSuffixIcon) {
+      onClickSuffixIcon(ev);
+    }
+
+    if (onResetIconClick) {
+      onResetIconClick(ev);
+    }
+  };
+
+  const onClickPrefixIconHandler = (ev: MouseEvent<HTMLInputElement>) => {
+    ev.stopPropagation();
+
+    if (onClickPrefixIcon) {
+      onClickPrefixIcon(ev);
+    }
+  };
+
+  const color = inputTheme(theme).color.state[state];
+
+  // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+  const iconState: InputIconState = mapStateToIconState[state] || 'default';
+  const isRequired = !!inputProps?.required;
+
+  const combinedInputProps = {
+    ...inputProps,
+    id,
+    placeholder,
+    autoFocus: autofocus,
+    type: inputType,
+    value,
+    onMouseEnter: onMouseEnterHandler,
+    onMouseLeave: onMouseLeaveHandler,
+    onClick: onClickHandler,
+    onFocus: onFocusHandler,
+    onChange: onChangeHandler,
+    onKeyUp,
+    onKeyDown,
+    onBlur: onBlurHandler,
+    disabled: state === 'disabled',
+  };
+
+  const a11yAttrs = {
+    'aria-activedescendant': inputProps?.['aria-activedescendant'],
+    'aria-autocomplete': inputProps?.['aria-autocomplete'],
+    'aria-controls': inputProps?.['aria-controls'],
+    'aria-labelledby': inputProps?.['aria-labelledby'],
+    'aria-invalid': state === 'error',
+    'aria-required': isRequired,
+    'aria-disabled': state === 'disabled',
+    'aria-describedby': helpText ? `${id}-help` : undefined,
+    required: isRequired,
+  };
+
+  const piiAttrs =
+    hasPersonallyIdentifiableInformation && value
+      ? {
+          'data-cs-mask': true,
+        }
+      : {};
+
+  const inlineAlertDataTestAttrs =
+    inputProps?.id || inputMaskProps?.id
+      ? `${inputMaskProps ? inputMaskProps?.id : inputProps?.id}__${state}`
+      : undefined;
+
+  return (
+    <StyledInputWrapper className={className}>
+      {helpText ? (
+        <HelperText variant="bodySmall" data-test="helpText">
+          {helpText}
+        </HelperText>
+      ) : null}
+
+      <InputLabel
+        inputType={inputType}
+        state={state}
+        hasPrefixIcon={!!prefixIcon}
+        hasSuffixIcon={!!suffixIcon}
+        color={color}
+        htmlFor={id}
+        label={label}
+        isShrink={isShrink}>
+        {prefixIcon ? (
+          <PrefixIcon
+            isIconPressed={isPrefixIconPressed}
+            icon={prefixIcon}
+            isDisabled={combinedInputProps.disabled}
+            iconLabel={
+              onClickPrefixIcon && prefixIconLabel ? prefixIconLabel : ''
+            }
+            iconState={iconState}
+            color={
+              state === 'disabled'
+                ? theme[theme.mode].color.grey4
+                : theme[theme.mode].color.grey11
+            }
+            onClick={onClickPrefixIcon ? onClickPrefixIconHandler : undefined}
+          />
+        ) : null}
+        {inputMaskProps ? (
+          <StyledInputMask
+            {...inputMaskProps}
+            {...combinedInputProps}
+            {...a11yAttrs}
+            {...piiAttrs}
+            data-test={inputMaskProps?.name}
+            inputRef={inputRef}
+            autoComplete={autocomplete}
+          />
+        ) : (
+          <StyledInput
+            {...combinedInputProps}
+            {...a11yAttrs}
+            {...piiAttrs}
+            inputType={inputType}
+            isShrink={isShrink}
+            data-test={inputProps?.name}
+            ref={inputRef}
+            hasPrefixIcon={!!prefixIcon}
+            hasSuffixIcon={!!suffixIcon}
+            autoComplete={autocomplete}
+            slot={slot}
+          />
+        )}
+        {!!suffixIcon && (
+          <SuffixIcon
+            isIconPressed={isSuffixIconPressed}
+            icon={suffixIcon}
+            isDisabled={combinedInputProps.disabled}
+            iconLabel={
+              (onClickSuffixIcon || onResetIconClick) && suffixIconLabel
+                ? suffixIconLabel
+                : ''
+            }
+            iconState={iconState}
+            color={
+              state === 'disabled'
+                ? theme[theme.mode].color.grey4
+                : theme[theme.mode].color.grey11
+            }
+            onClick={onClickSuffixIcon ? onClickSuffixIconHandler : undefined}
+          />
+        )}
+      </InputLabel>
+
+      {renderInlineAlert(
+        state,
+        hasDefaultValidationMessage,
+        validationMessage,
+        inlineAlertDataTestAttrs
+      )}
+    </StyledInputWrapper>
+  );
+};
+
+Input.displayName = 'Input';
+```
