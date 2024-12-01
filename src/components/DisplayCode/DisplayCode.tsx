@@ -19,7 +19,7 @@ type DisplayCodeProps = {
   isA11y?: boolean;
   component: ReactNode;
   language?: 'javascript' | 'html' | 'jsx';
-  isReactComponents?: boolean;
+  isReactComponent?: boolean;
 };
 
 export default function DisplayCode({
