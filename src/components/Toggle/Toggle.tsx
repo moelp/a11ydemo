@@ -1,6 +1,6 @@
 'use client';
 
-import { v4 as uuidv4 } from 'uuid';
+import { useId } from 'react';
 import { useA11yContext } from '#/utils/a11yContext';
 
 type ToggleProps = {
@@ -29,7 +29,7 @@ export default function Toggle({
   const { state: a11yMode } = useA11yContext();
   isA11y = isA11y != undefined ? isA11y : a11yMode.isSemantic;
 
-  const uid = uuidv4();
+  const uid = useId();
 
   const SemanticTagLabel = isA11y ? 'label' : 'span';
 
