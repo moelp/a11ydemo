@@ -51,7 +51,7 @@ export default function NotificationProvider({
     type: 'success' | 'error' | 'info' = 'info',
     duration = 3000
   ) => {
-    const id = `${Date.now()}-${uuidv4()}`;
+    const id = `notification-${uuidv4()}`;
     setNotifications((prev) => [...prev, { id, message, type, duration }]);
     setTimeout(() => removeNotification(id), duration);
   };
