@@ -35,7 +35,7 @@ export default function Notification({
     ? 'px-4 py-2 rounded-md '
     : 'px-[16px] py-[8px] rounded-[6px]';
   const classNotification =
-    'w-full flex text-foregroundOnPrimary bg-primary shadow-xl';
+    'w-full flex justify-between text-foregroundOnPrimary bg-primary shadow-xl';
 
   return (
     <div
