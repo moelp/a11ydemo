@@ -19,6 +19,12 @@ type SectionProps = {
   isFullHeight?: boolean;
 };
 
+type ConditionalWrapperProps = {
+  condition: boolean;
+  wrapper: (children: ReactNode) => ReactNode;
+  children: ReactNode;
+};
+
 export default function Section({
   isA11y,
   children,
@@ -34,8 +40,11 @@ export default function Section({
 
   const SemanticTag = isA11y && !asHero ? 'section' : 'div';
 
-  const ConditionalWrapper = ({ condition, wrapper, children }) =>
-    condition ? wrapper(children) : children;
+  const ConditionalWrapper = ({
+    condition,
+    wrapper,
+    children,
+  }: ConditionalWrapperProps) => (condition ? wrapper(children) : children);
 
   return (
     <SemanticTag
@@ -51,8 +60,8 @@ export default function Section({
       )}
       data-test="page-section">
       <ConditionalWrapper
-        condition={isFullHeight}
-        wrapper={(children: ReactNode) => (
+        condition={isFullHeight ? isFullHeight : false}
+        wrapper={(children) => (
           <div className="section__inner">{children}</div>
         )}>
         {title && (
