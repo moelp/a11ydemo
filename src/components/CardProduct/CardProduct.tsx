@@ -13,6 +13,7 @@ export default function CardProduct({ isA11y }: CardProductProps) {
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <div className="h-56 w-full">
         <a href="#">
+          {/* eslint-disable @next/next/no-img-element */}
           <img
             className="mx-auto h-full dark:hidden"
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
@@ -23,6 +24,7 @@ export default function CardProduct({ isA11y }: CardProductProps) {
             src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg"
             alt=""
           />
+          {/* eslint-enable @next/next/no-img-element */}
         </a>
       </div>
       <div className="pt-6">
