@@ -1,6 +1,4 @@
-import { createContainer } from '#/utils/createContainer';
 import type { Config } from 'tailwindcss';
-import plugin from 'tailwindcss/plugin';
 import containerQueries from '@tailwindcss/container-queries';
 
 const config: Config = {
