@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import dynamic from 'next/dynamic';
 import {
   IconChevronDown,
@@ -51,7 +51,6 @@ import Section from '#/components/Section/Section';
 import Heading from '#/components/Heading/Heading';
 import Image from '#/components/Image/Image';
 import { List, ListItem } from '#/components/List/List';
-import { Modal, ModalHandle } from '#/components/Modal/Modal';
 import Toggle from '#/components/Toggle/Toggle';
 import PageAside from '#/components/PageAside/PageAside';
 import AnchorNavigation from '#/components/AnchorNavigation/AnchorNavigation';
@@ -62,6 +61,7 @@ import CodeExample from '#public/codeexample.mdx';
 
 import DesignExampleLight from '#public/component-example-light.png';
 import DesignExampleDark from '#public/component-example-dark.png';
+import ModalExample from '#/componentsPage/ModalExample/ModalExample';
 
 interface iOptionFontSize {
   value: TypeBaseFontSize;
@@ -120,10 +120,6 @@ export default function Home() {
 
   const { addNotification } = useNotification();
   const [notificationCounter, setNotificationCounter] = useState(0);
-  const refModalExample = useRef<ModalHandle>(null);
-  const [isModalExampleOpen, setIsModalExampleOpen] = useState<
-    boolean | undefined
-  >(false);
 
   useMetadata(
     isA11y ? 'a11y Demo' : '',
@@ -166,22 +162,6 @@ export default function Home() {
       document.documentElement.removeAttribute('dir');
     }
   }
-
-  const handleOpenModalExample = () => {
-    refModalExample.current?.open();
-    //console.log('ModalExample State', refModalExample.current?.getState());
-    //console.log('isModalExampleOpen', isModalExampleOpen);
-    //const modalState = refModalExample.current?.getState();
-    setIsModalExampleOpen(!isModalExampleOpen); // Set isModalOpen to true when opening
-  };
-
-  const handleCloseModalExample = () => {
-    refModalExample.current?.close();
-    //console.log('ModalExample State', refModalExample.current?.getState());
-    //console.log('isModalExampleOpen', isModalExampleOpen);
-    //const modalState = refModalExample.current?.getState();
-    setIsModalExampleOpen(!isModalExampleOpen); // Set isModalOpen to false when closing
-  };
 
   useEffect(() => {
     // Check if URL contains a hash (#) and scroll to the target element
@@ -612,15 +592,7 @@ export default function Home() {
                   }>
                   Action 2
                 </Button> */}
-                <Button
-                  //onClick={isA11y ? toggleModal : toggleModalNotA11y}
-                  onClick={() => handleOpenModalExample()}
-                  {...(isA11y && { 'aria-haspopup': 'dialog' })}
-                  {...(isA11y && {
-                    'aria-expanded': isModalExampleOpen,
-                  })}>
-                  Open Modal
-                </Button>
+                <ModalExample />
                 {/* <Button
                   onClick={() => {
                     console.log(
@@ -847,15 +819,7 @@ export default function Home() {
               title="Motion & Animation"
               text="Respect users `prefers reduced motion` settings."
               isFullHeight={true}>
-              <Button
-                //onClick={isA11y ? toggleModal : toggleModalNotA11y}
-                onClick={() => handleOpenModalExample()}
-                {...(isA11y && { 'aria-haspopup': 'dialog' })}
-                {...(isA11y && {
-                  'aria-expanded': isModalExampleOpen,
-                })}>
-                Open Modal
-              </Button>
+              <ModalExample />
             </Section>
           </div>
         </div>
@@ -879,12 +843,6 @@ export default function Home() {
         </Section>
       </PageMain>
       <PageFooter>Footer</PageFooter>
-      <Modal
-        ref={refModalExample}
-        initialOpened={isModalExampleOpen}
-        onClose={handleCloseModalExample}>
-        <p>This is the {isA11y ? 'semantic' : `non semantic`} modal content</p>
-      </Modal>
       {/* {notifications.map((notification, index) => (
         <Snackbar
           role="alert"
